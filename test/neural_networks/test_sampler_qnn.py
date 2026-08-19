@@ -104,7 +104,7 @@ class TestSamplerQNN(QiskitMachineLearningTestCase):
         # define sampler primitives
         self.sampler = Sampler()
         self.sampler_shots = Sampler(default_shots=100, seed=42)
-        self.backend = GenericBackendV2(num_qubits=8)
+        self.backend = GenericBackendV2(num_qubits=8, seed=123, noise_info=False)
         self.session = Session(backend=self.backend)
         self.sampler_v2 = SamplerV2(mode=self.session)
         self.pass_manager = None
@@ -303,7 +303,7 @@ class TestSamplerQNN(QiskitMachineLearningTestCase):
                 grad.shape
             )
             diff = input_grad_ - grad
-            self.assertAlmostEqual(np.max(np.abs(diff)), 0.0, places=3)
+            self.assertAlmostEqual(float(np.max(np.abs(diff))), 0.0, places=3)
 
         # test weight gradients
         eps = 1e-2
@@ -319,7 +319,7 @@ class TestSamplerQNN(QiskitMachineLearningTestCase):
                 :, :, k
             ].reshape(grad.shape)
             diff = weights_grad_ - grad
-            self.assertAlmostEqual(np.max(np.abs(diff)), 0.0, places=3)
+            self.assertAlmostEqual(float(np.max(np.abs(diff))), 0.0, places=3)
 
     def test_setters_getters(self):
         """Test Sampler QNN properties."""
